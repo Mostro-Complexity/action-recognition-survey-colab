@@ -118,20 +118,20 @@ if __name__ == "__main__":
         img_row, img_col, n_frames = 32, 32, 38
         n_classes = len(np.unique(action_labels))
 
-        for i in range(n_tr_te_splits):
+        for i in [0]:
             model = Sequential()
 
             model.add(Convolution3D(
-                32,  # number of kernel
+                128,  # number of kernel
                 kernel_dim1=7,  # depth
                 kernel_dim2=5,  # rows
                 kernel_dim3=5,  # cols
                 input_shape=(1, n_frames, img_row, img_col),
-                activation='relu'
+                activation='relu',strides=1
             ))
             model.add(MaxPooling3D(pool_size=(2, 2, 2)))
             model.add(Convolution3D(
-                128,  # number of kernel
+                36,  # number of kernel
                 kernel_dim1=5,  # depth
                 kernel_dim2=5,  # rows
                 kernel_dim3=5,  # cols
@@ -142,10 +142,10 @@ if __name__ == "__main__":
             model.add(Dropout(0.5))
 
             model.add(Flatten())
-            model.add(Dense(2056, init='normal', activation='linear'))
+            #model.add(Dense(2056, init='normal', activation='linear'))
             # model.add(Dropout(0.5))
-            model.add(Dense(512, init='normal', activation='linear'))
-            # model.add(Dropout(0.5))
+            #model.add(Dense(512, init='normal', activation='linear'))
+            model.add(Dropout(0.5))
             model.add(Dense(128, init='normal', activation='linear'))
             model.add(Dense(n_classes, init='normal'))
 
@@ -181,6 +181,6 @@ if __name__ == "__main__":
             pr_labels = np.argmax(pr_labels, axis=-1)
 
             accuracy = accuracy_score(te_labels, pr_labels)
-            print('Split %d finished, accuracy:%d' % (i + 1, accuracy))
+            print('Split %d finished, accuracy:%f' % (i + 1, accuracy))
 
     pass
